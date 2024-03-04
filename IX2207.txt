@@ -1,0 +1,122 @@
+Router(config)# show star
+Using 1997 out of 1048576 bytes
+
+! NEC Portable Internetwork Core Operating System Software
+! IX Series IX2207 (magellan-sec) Software, Version 9.3.11, RELEASE SOFTWARE
+! Compiled Mar 09-Wed-2016 11:07:55 JST #2
+! Last updated Mar 04-Mon-2024 20:54:12 JST
+!
+!
+timezone +09 00
+!
+!
+!
+username admin password hash 4Ccaaa26a10BaeD263DEAC4FaB5690@ administrator
+!
+!
+!
+!
+!
+!
+logging buffered 131072
+logging subsystem all warn
+logging timestamp datetime
+!
+!
+ip ufs-cache enable
+ip route default GigaEthernet0.1
+ip dhcp enable
+ip access-list web-http-acl permit ip src any dest 192.168.1.254/32
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+proxy-dns ip enable
+proxy-dns server 192.168.1.254
+!
+usbmem enable
+!
+!
+ssh-server ip enable
+!
+http-server username admin secret-password NL0j89Vzwuo@uwy1vf3gHvvv
+http-server authentication-method digest
+http-server ip access-list web-http-acl
+http-server ip enable
+!
+web-console interface lan1 GigaEthernet2.0
+!
+!
+!
+!
+!
+!
+!
+!
+ppp profile sample
+  authentication myname b202303f0130442@sbb.ne.jp
+  authentication password b202303f0130442@sbb.ne.jp matsunoki3124
+!
+ip dhcp profile web-dhcp-gigaethernet2.0
+  dns-server 192.168.1.254
+!
+ip dhcp profile lan
+  dns-server 192.168.1.254
+!
+device GigaEthernet0
+!
+device GigaEthernet1
+!
+device GigaEthernet2
+!
+device USB0
+  no shutdown
+!
+device USB1
+  shutdown
+!
+interface GigaEthernet0.0
+  no ip address
+  shutdown
+!
+interface GigaEthernet1.0
+  no ip address
+  no shutdown
+!
+interface GigaEthernet2.0
+  ip address 192.168.1.254/24
+  ip dhcp binding lan
+  no shutdown
+!
+interface USB-Serial0.0
+  encapsulation ppp
+  no auto-connect
+  no ip address
+  shutdown
+!
+interface USB-Serial1.0
+  encapsulation ppp
+  no auto-connect
+  no ip address
+  shutdown
+!
+interface GigaEthernet0.1
+  encapsulation pppoe
+  auto-connect
+  ppp binding sample
+  ip address ipcp
+  ip napt enable
+  no shutdown
+!
+interface Loopback0.0
+  no ip address
+!
+interface Null0.0
+  no ip address
