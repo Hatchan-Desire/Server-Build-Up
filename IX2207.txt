@@ -11,7 +11,7 @@ timezone +09 00
 !
 !
 !
-username admin password hash 4Ccaaa26a10BaeD263DEAC4FaB5690@ administrator
+username ***** password hash *****@ administrator
 !
 !
 !
