@@ -46,7 +46,7 @@ usbmem enable
 !
 ssh-server ip enable
 !
-http-server username admin secret-password NL0j89Vzwuo@uwy1vf3gHvvv
+http-server username ***** secret-password *******
 http-server authentication-method digest
 http-server ip access-list web-http-acl
 http-server ip enable
@@ -61,8 +61,8 @@ web-console interface lan1 GigaEthernet2.0
 !
 !
 ppp profile sample
-  authentication myname b202303f0130442@sbb.ne.jp
-  authentication password b202303f0130442@sbb.ne.jp matsunoki3124
+  authentication myname ***
+  authentication password *** ***
 !
 ip dhcp profile web-dhcp-gigaethernet2.0
   dns-server 192.168.1.254
