@@ -6,9 +6,9 @@ hostname sh510
 !
 no banner motd
 !
-username ******* privilege 15 password 8 *************************************
+username ******* privilege 15 password 8 ********************
 !
-ssh server allow-users *
+ssh server allow-users *******
 no service ssh
 !
 platform hwfilter-size ipv4-limited-ipv6
@@ -73,7 +73,13 @@ interface port2.0.25-2.0.26
  switchport mode access
 !
 interface vlan1
- ip address 192.168.1.253/24
+ ip address 192.168.254.1/24
+!
+interface vlan10
+ ip address 192.168.1.1/24
+!
+interface vlan20
+ ip address 192.168.2.1/24
 !
 line con 0
 line vty 0 4
