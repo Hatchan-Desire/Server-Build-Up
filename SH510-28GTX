@@ -1,0 +1,81 @@
+sh510#show star
+!
+service password-encryption
+!
+hostname sh510
+!
+no banner motd
+!
+username ******* privilege 15 password 8 *************************************
+!
+ssh server allow-users *
+no service ssh
+!
+platform hwfilter-size ipv4-limited-ipv6
+!
+service telnet
+!
+service http
+!
+clock timezone JST plus 9:00
+!
+snmp-server
+!
+!
+aaa authentication enable default local
+aaa authentication login default local
+!
+!
+!
+stack virtual-chassis-id 2557
+!
+ip domain-lookup
+!
+!
+!
+no service dhcp-server
+!
+!
+!
+no ip multicast-routing
+!
+spanning-tree mode rstp
+!
+lacp global-passive-mode enable
+!
+switch 2 provision sh510-28
+!
+vlan database
+ vlan 10,20 state enable
+!
+interface port2.0.1
+ switchport
+ switchport mode access
+ switchport access vlan 10
+!
+interface port2.0.2
+ switchport
+ switchport mode access
+ switchport access vlan 20
+!
+interface port2.0.3-2.0.12
+ switchport
+ switchport mode access
+ switchport access vlan 10
+!
+interface port2.0.13-2.0.24
+ switchport
+ switchport mode access
+ switchport access vlan 20
+!
+interface port2.0.25-2.0.26
+ switchport
+ switchport mode access
+!
+interface vlan1
+ ip address 192.168.1.253/24
+!
+line con 0
+line vty 0 4
+!
+end
