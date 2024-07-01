@@ -1,17 +1,19 @@
-Router(config)# show star
-Using 1997 out of 1048576 bytes
+IX2207(config)# show star
+Using 2264 out of 1048576 bytes
 
 ! NEC Portable Internetwork Core Operating System Software
 ! IX Series IX2207 (magellan-sec) Software, Version 9.3.11, RELEASE SOFTWARE
 ! Compiled Mar 09-Wed-2016 11:07:55 JST #2
-! Last updated Mar 04-Mon-2024 20:54:12 JST
+! Last updated Jul 01-Mon-2024 17:56:54 JST
 !
 !
+hostname IX2207
 timezone +09 00
 !
 !
 !
-username ***** password hash *****@ administrator
+username ***** password hash ******************@ administrator
+username *** password hash *******************@ monitor
 !
 !
 !
@@ -46,7 +48,8 @@ usbmem enable
 !
 ssh-server ip enable
 !
-http-server username ***** secret-password *******
+http-server username ***** secret-password **************
+http-server wol-username *** secret-password ***************
 http-server authentication-method digest
 http-server ip access-list web-http-acl
 http-server ip enable
@@ -61,8 +64,8 @@ web-console interface lan1 GigaEthernet2.0
 !
 !
 ppp profile sample
-  authentication myname ***
-  authentication password *** ***
+  authentication myname ******************
+  authentication password ******************* *************
 !
 ip dhcp profile web-dhcp-gigaethernet2.0
   dns-server 192.168.1.254
@@ -73,8 +76,10 @@ ip dhcp profile lan
 device GigaEthernet0
 !
 device GigaEthernet1
+  shutdown
 !
 device GigaEthernet2
+  vlan-group 2 port 4
 !
 device USB0
   no shutdown
@@ -115,8 +120,13 @@ interface GigaEthernet0.1
   ip napt enable
   no shutdown
 !
+interface GigaEthernet2:2.0
+  ip address 192.168.2.1/24
+  no shutdown
+!
 interface Loopback0.0
   no ip address
 !
 interface Null0.0
   no ip address
+IX2207(config)#
