@@ -1,0 +1,187 @@
+IX3110(config)$ show startup-config
+Using 4224 out of 2097152 bytes
+
+! NEC Portable Internetwork Core Operating System Software
+! IX Series IX3100 (magellan-sec) Software, Version 10.5.35, RELEASE SOFTWARE
+! Compiled Dec 15-Fri-2023 15:30:47 JST #2
+! Last updated Jun 22-Sun-2025 11:19:37 JST
+!
+hostname IX3110
+timezone +09 00
+!
+logging buffered 131072
+logging subsystem all warn
+!
+no syslog ip enable
+!
+aaa enable
+aaa authentication login ssh-login-list local
+!
+username admin password hash 4BbF4DFd91AAb7296b66f940f46699@ administrator
+!
+!
+ids ip type all action discard
+ids logging-interval 10
+!
+!
+ip route default GigaEthernet0.1
+ip route default 192.168.1.254
+ip dhcp enable
+ip access-list kisaragi permit ip src any dest 192.168.1.102/32
+ip access-list web-http-acl permit ip src any dest 10.1.0.1/32
+ip access-list web_vpnlist permit ip src any dest any
+!
+!
+!
+ike nat-traversal
+!
+!
+!
+!
+bridge irb enable
+!
+!
+!
+!
+ip name-server 192.168.1.254
+ip name-server 1.1.1.1
+!
+proxy-dns ip enable
+proxy-dns server 192.168.1.254 priority 254
+proxy-dns server 1.1.1.1 priority 254
+!
+!
+ssh-server authentication ssh-login-list
+ssh-server ip enable
+!
+http-server username admin secret-password ***
+http-server ip access-list web-http-acl
+http-server ip enable
+!
+!
+ikev2 authentication psk id ipv4 ***.***.***.*** key char ***
+ikev2 authentication psk id keyid TTUT02 key char ***
+!
+nm ip enable
+nm account kisarag1-net password secret ***
+nm sitename tyhs
+!
+!
+!
+!
+!
+!
+ppp profile web-ppp-gigaethernet0.1
+  authentication myname ***
+  authentication password *** ***
+!
+ip dhcp profile home
+  assignable-range 192.168.1.1 192.168.1.250
+  dns-server 192.168.1.254
+!
+ip dhcp profile web-dhcp-gigaethernet3.0
+  assignable-range 192.168.1.2 192.168.1.250
+  dns-server 10.1.0.1
+!
+router bgp 65500
+  neighbor 192.168.250.5 remote-as 65000
+  neighbor 192.168.250.10 remote-as 64646
+  address-family ipv4 unicast
+    network 192.168.1.0/24
+!
+device GigaEthernet0
+!
+device GigaEthernet1
+  shutdown
+!
+device GigaEthernet2
+  shutdown
+!
+device GigaEthernet3
+  connector-type sfp
+!
+interface GigaEthernet0.0
+  no ip address
+  ip napt enable
+  shutdown
+!
+interface GigaEthernet1.0
+  no ip address
+  bridge-group 1
+  no shutdown
+!
+interface GigaEthernet2.0
+  no ip address
+  shutdown
+!
+interface GigaEthernet3.0
+  description LAN1
+  ip address 10.1.0.1/24
+  ip dhcp binding web-dhcp-gigaethernet3.0
+  bridge-group 1
+  no shutdown
+!
+interface GigaEthernet0.1
+  description WAN1
+  encapsulation pppoe
+  auto-connect
+  ppp binding web-ppp-gigaethernet0.1
+  ip address ipcp
+  ip tcp adjust-mss auto
+  ip napt enable
+  ip napt hairpinning
+  ip napt static GigaEthernet0.1 50
+  ip napt static GigaEthernet0.1 udp 500
+  ip napt static GigaEthernet0.1 udp 4500
+  ip napt service ssh 192.168.1.103 none tcp 22
+  ip napt service Minecraft102 192.168.1.102 none tcp 25565
+  ip napt service Minecraft102ssh 192.168.1.102 22 tcp 2222
+  ip napt service Minecraft102BE 192.168.1.102 none udp 19132
+  no shutdown
+!
+interface BVI1
+  ip address 192.168.1.254/24
+  ip proxy-arp
+  ip dhcp binding home
+  bridge-group 1
+  proxy-dns ip enable
+  ssh-server ip enable
+  no shutdown
+!
+interface Loopback0.0
+  no ip address
+!
+interface Null0.0
+  no ip address
+!
+interface Tunnel0.0
+  tunnel mode ipsec-ikev2
+  ip address 192.168.250.6/30
+  ip tcp adjust-mss auto
+  ikev2 connect-type auto
+  ikev2 ipsec pre-fragment
+  ikev2 peer 119.105.102.203 authentication psk id ipv4 119.105.102.203
+  no shutdown
+!
+interface Tunnel1.0
+  tunnel mode ipsec-ikev2
+  ip address 192.168.250.9/30
+  ip tcp adjust-mss auto
+  ikev2 connect-type auto
+  ikev2 ipsec pre-fragment
+  ikev2 negotiation-direction responder
+  ikev2 peer any authentication psk id keyid TTUT02
+  no shutdown
+!
+interface Tunnel1022.0
+  no ip address
+  shutdown
+!
+web-console system information
+  o lan1 GigaEthernet3.0
+  o wan1 GigaEthernet0.1
+!
+web-console system vpn
+  o alias interface Tunnel0.0 ascii DDT
+  o alias interface Tunnel1.0 ascii TTUT-network
+IX3110(config)$ 
