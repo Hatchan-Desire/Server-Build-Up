@@ -17,7 +17,7 @@ no syslog ip enable
 aaa enable
 aaa authentication login ssh-login-list local
 !
-username admin password hash 4BbF4DFd91AAb7296b66f940f46699@ administrator
+username admin password hash *** administrator
 !
 !
 ids ip type all action discard
@@ -160,7 +160,7 @@ interface Tunnel0.0
   ip tcp adjust-mss auto
   ikev2 connect-type auto
   ikev2 ipsec pre-fragment
-  ikev2 peer 119.105.102.203 authentication psk id ipv4 119.105.102.203
+  ikev2 peer *** authentication psk id ipv4 ***
   no shutdown
 !
 interface Tunnel1.0
