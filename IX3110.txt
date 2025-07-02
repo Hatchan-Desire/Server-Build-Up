@@ -1,10 +1,10 @@
-IX3110(config)$ show startup-config
-Using 4224 out of 2097152 bytes
+IX3110(config)# show star
+Using 4211 out of 2097152 bytes
 
 ! NEC Portable Internetwork Core Operating System Software
 ! IX Series IX3100 (magellan-sec) Software, Version 10.5.35, RELEASE SOFTWARE
 ! Compiled Dec 15-Fri-2023 15:30:47 JST #2
-! Last updated Jun 22-Sun-2025 11:19:37 JST
+! Last updated Jul 03-Thu-2025 03:23:00 JST
 !
 hostname IX3110
 timezone +09 00
@@ -25,7 +25,6 @@ ids logging-interval 10
 !
 !
 ip route default GigaEthernet0.1
-ip route default 192.168.1.254
 ip dhcp enable
 ip access-list kisaragi permit ip src any dest 192.168.1.102/32
 ip access-list web-http-acl permit ip src any dest 10.1.0.1/32
@@ -45,6 +44,7 @@ bridge irb enable
 !
 ip name-server 192.168.1.254
 ip name-server 1.1.1.1
+dns cache enable
 !
 proxy-dns ip enable
 proxy-dns server 192.168.1.254 priority 254
@@ -59,8 +59,8 @@ http-server ip access-list web-http-acl
 http-server ip enable
 !
 !
-ikev2 authentication psk id ipv4 ***.***.***.*** key char ***
-ikev2 authentication psk id keyid TTUT02 key char ***
+ikev2 authentication psk id ipv4 xxx.xxx.xxx.xxx key char ***
+ikev2 authentication psk id keyid TTUT key char ***
 !
 nm ip enable
 nm account kisarag1-net password secret ***
@@ -81,7 +81,7 @@ ip dhcp profile home
 !
 ip dhcp profile web-dhcp-gigaethernet3.0
   assignable-range 192.168.1.2 192.168.1.250
-  dns-server 10.1.0.1
+  dns-server 192.168.1.254
 !
 router bgp 65500
   neighbor 192.168.250.5 remote-as 65000
@@ -116,7 +116,7 @@ interface GigaEthernet2.0
 !
 interface GigaEthernet3.0
   description LAN1
-  ip address 10.1.0.1/24
+  ip address 192.168.1.254/24
   ip dhcp binding web-dhcp-gigaethernet3.0
   bridge-group 1
   no shutdown
@@ -140,7 +140,7 @@ interface GigaEthernet0.1
   no shutdown
 !
 interface BVI1
-  ip address 192.168.1.254/24
+  ip address 10.1.0.1/24
   ip proxy-arp
   ip dhcp binding home
   bridge-group 1
@@ -157,20 +157,20 @@ interface Null0.0
 interface Tunnel0.0
   tunnel mode ipsec-ikev2
   ip address 192.168.250.6/30
-  ip tcp adjust-mss auto
+  ip tcp adjust-mss 1300
   ikev2 connect-type auto
   ikev2 ipsec pre-fragment
-  ikev2 peer *** authentication psk id ipv4 ***
+  ikev2 peer xxx.xxx.xxx.xxx authentication psk id ipv4 xxx.xxx.xxx.xxx
   no shutdown
 !
 interface Tunnel1.0
   tunnel mode ipsec-ikev2
   ip address 192.168.250.9/30
-  ip tcp adjust-mss auto
+  ip tcp adjust-mss 1300
   ikev2 connect-type auto
   ikev2 ipsec pre-fragment
   ikev2 negotiation-direction responder
-  ikev2 peer any authentication psk id keyid TTUT02
+  ikev2 peer any authentication psk id keyid TTUT
   no shutdown
 !
 interface Tunnel1022.0
@@ -184,4 +184,3 @@ web-console system information
 web-console system vpn
   o alias interface Tunnel0.0 ascii DDT
   o alias interface Tunnel1.0 ascii TTUT-network
-IX3110(config)$ 
