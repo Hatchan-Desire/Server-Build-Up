@@ -1,2 +1,2 @@
-# Server-Build-Up
-ねっとわーーーーーーーーーーく
+# kisaragi-net
+おうちネットワークやサーバーの記録
